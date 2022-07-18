@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event World</title>
+
+    <style>
+      .contents {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 2px solid black;
+        padding: 15px;
+      }
+
+      #generateButton {
+        margin-top: 5px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contents" align="center" hidden>
+      <button id="incrementButton">Tekan Aku :)</button>
+      <h3>
+        Kamu sudah menekan tombol di atas sebanyak <span id="count">0</span>
+      </h3>
+    </div>
+
+    <script>
+      function welcome() {
+        alert('cringe xd');
+        setTimeout(() => {
+          const contents = document.querySelector('.contents');
+          contents.removeAttribute('hidden');
+        }, 2000);
+      }
+      function increment() {
+        document.getElementById('count').innerText++;
+
+        if (document.getElementById('count').innerText == 7) {
+          const hiddenMsg = document.createElement('h4');
+          hiddenMsg.innerText = "Cong RATS, here's a rat";
+          const image = document.createElement('img');
+          image.setAttribute('src', 'https://i.ibb.co/0V49VRZ/catto.jpg');
+          const contents = document.querySelector('.contents');
+          contents.appendChild(hiddenMsg).appendChild(image);
+        }
+      }
+      // document.body.onload = welcome;
+      // document.getElementById('incrementButton').onclick = increment;
+
+      //eventListener
+      window.addEventListener('load', welcome);
+      document
+        .getElementById('incrementButton')
+        .addEventListener('click', increment);
+    </script>
+  </body>
+</html>
