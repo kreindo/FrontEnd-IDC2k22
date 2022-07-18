@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing ⚠</title>
+  </head>
+  <body>
+    <div>
+      <div>
+        <h1>Rainworld</h1>
+        <h3>Lorem ipsum dolor</h3>
+      </div>
+      <div>
+        <h5>Download here:</h5>
+        <button id="button">
+          <a> Click here! </a>
+        </button>
+        <p id="download" style="visibility: hidden">Downloading file...</p>
+      </div>
+      <div>
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam,
+          magnam beatae? Voluptates at minus excepturi qui beatae harum laborum,
+          officiis voluptatum ad, quas itaque provident facere, quod aspernatur
+          suscipit? Ratione provident nobis dolore doloremque odit? Blanditiis
+          deserunt accusamus repellat sapiente voluptate vel ea at nobis earum
+          nihil qui temporibus voluptates iusto ducimus nisi aliquid minus porro
+          libero corrupti et minima, sint necessitatibus! Eos quia officiis,
+          distinctio alias atque itaque eius! Esse libero reprehenderit corrupti
+          a ratione. Dolorum nobis totam esse doloribus beatae itaque aspernatur
+          quaerat nisi veritatis aliquid ducimus laborum fuga sunt dolorem,
+          mollitia laudantium, ipsum nostrum at corporis assumenda.
+        </p>
+      </div>
+    </div>
+    <script>
+      //js
+      //make event
+      window.addEventListener('DOMContentLoaded', function () {
+        const button = document.getElementById('button');
+        const url =
+          'magnet:?xt=urn:btih:bc2d91af3d89e0a5dea5538a63d1b60916dc3a3c&dn=%5BMTBB%5D%20Made%20in%20Abyss%20S2%20-%20The%20Golden%20City%20of%20the%20Scorching%20Sun%20-%2002&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce';
+        button.setAttribute('src', url);
+        button.addEventListener('click', function (event) {
+          const download = document.getElementById('download');
+          download.style.visibility = 'visible';
+          setTimeout(() => {
+            download.style.visibility = 'hidden';
+          }, 3000);
+          const decode = window.encodeURI(url);
+          const newEl = document.createElement('p');
+          newEl.innerText = decode;
+          download.appendChild(newEl);
+          console.log(decode);
+        });
+      });
+    </script>
+  </body>
+</html>

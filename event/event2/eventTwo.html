@@ -1,4 +1,5 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
   <head>
     <title>Event World</title>
     <style>
@@ -28,7 +29,9 @@
       window.addEventListener('load', function () {
         const tombol = document.getElementById('tombol');
         tombol.addEventListener('changeCaption', CustomEventHandler);
-        tombol.addEventListener('click', function () {});
+        tombol.addEventListener('click', function () {
+          tombol.dispatchEvent(changeCaption);
+        });
       });
       function CustomEventHandler(ev) {
         console.log('Event ' + ev.type + ' executed');

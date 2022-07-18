@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>number</h1>
+    <p id="displayNum"></p>
+    <script>
+      window.addEventListener('DOMContentLoaded', function () {
+        let number = gen();
+        function gen() {
+          return +new Date();
+        }
+        const displayNum = document.getElementById('displayNum');
+
+        console.log(number);
+
+        setInterval(timer, 1000);
+
+        function timer() {
+          number = gen();
+          displayNum.innerText = number;
+        }
+        setTimeout(() => {
+          window.clearInterval();
+        }, 5000);
+      });
+    </script>
+  </body>
+</html>
