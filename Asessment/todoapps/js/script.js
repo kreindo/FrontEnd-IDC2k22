@@ -1,5 +1,4 @@
-const todos = [];
-const RENDER_EVENT = 'render-todo';
+const todos = [];const RENDER_EVENT = 'render-todo';
 
 document.addEventListener('DOMContentLoaded', function () {
   const submitForm = document.getElementById('form');
@@ -49,9 +48,14 @@ function makeTodo(todoObject) {
   const textTimestamp = document.createElement('p');
   textTimestamp.innerText = todoObject.timestamp;
 
+  const textId = document.createElement('p');
+  textId.style.fontSize = '10px';
+  textId.style.color = 'grey';
+  textId.innerText = `item-${todoObject.id}`;
+
   const textContainer = document.createElement('div');
   textContainer.classList.add('inner');
-  textContainer.append(textTitle, textTimestamp);
+  textContainer.append(textTitle, textTimestamp, textId);
 
   const container = document.createElement('div');
   container.classList.add('item', 'shadow');
@@ -79,10 +83,28 @@ function makeTodo(todoObject) {
     checkButton.classList.add('check-button');
 
     checkButton.addEventListener('click', function () {
-      addTaskToCompleted(todoObject.id);
+      setTimeout(() => {
+        addTaskToCompleted(todoObject.id);
+      }, 2000);
     });
 
     container.append(checkButton);
+  }
+
+  function addTaskToCompleted(todoId) {
+    const todoTarget = findTodo(todoId);
+    if (todoTarget == null) return;
+    todoTarget.isCompleted = true;
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+
+  function findTodo(todoId) {
+    for (const todoItem of todos) {
+      if (todoItem.id == todoId) {
+        return todoItem;
+      }
+    }
+    return null;
   }
 
   return container;
