@@ -35,9 +35,16 @@ document.addEventListener(RENDER_EVENT, function () {
   const uncompletedTODOList = document.getElementById('todos');
   uncompletedTODOList.innerHTML = '';
 
+  const completedTODOList = document.getElementById('completed-todos');
+  completedTODOList.innerHTML = '';
+
   for (const todoItem of todos) {
     const todoElement = makeTodo(todoItem);
-    uncompletedTODOList.append(todoElement);
+    if (!todoItem.isCompleted) {
+      uncompletedTODOList.append(todoElement);
+    } else {
+      completedTODOList.append(todoElement);
+    }
   }
 });
 
@@ -83,9 +90,7 @@ function makeTodo(todoObject) {
     checkButton.classList.add('check-button');
 
     checkButton.addEventListener('click', function () {
-      setTimeout(() => {
-        addTaskToCompleted(todoObject.id);
-      }, 2000);
+      addTaskToCompleted(todoObject.id);
     });
 
     container.append(checkButton);
