@@ -1,5 +1,4 @@
-const books = [];
-const RENDER_EVENT = 'render-bookshelf';
+const books = [];const RENDER_EVENT = 'render-bookshelf';
 
 window.addEventListener('DOMContentLoaded', function () {
   const submitdata = document.getElementById('inputBook');
@@ -50,6 +49,7 @@ document.addEventListener(RENDER_EVENT, function () {
 
   const completeBookshelf = document.getElementById('completeBookshelfList');
   completeBookshelf.innerHTML = '';
+
   for (const book of books) {
     const bookElement = makeBookElement(book);
     if (!book.isRead) {
@@ -62,20 +62,59 @@ document.addEventListener(RENDER_EVENT, function () {
 
 function makeBookElement(bookData) {
   const bookTitle = document.createElement('h3');
-  bookTitle.innerText = bookData.title;
+  bookTitle.innerText = `Judul: ${bookData.title}`;
 
   const bookAuthor = document.createElement('p');
-  bookAuthor.innerText = bookData.author;
+  bookAuthor.innerText = `Penulis: ${bookData.author}`;
 
   const bookYear = document.createElement('p');
-  bookYear.innerText = bookData.year;
+  bookYear.innerText = `Tahun: ${bookData.year}`;
+
+  const readButton = document.createElement('button');
+  readButton.classList.add('green');
+  readButton.innerText = 'Selesai Dibaca';
+  readButton.addEventListener('click', function () {
+    readBook(bookData.id);
+  });
+
+  function readBook(bookid) {
+    const targetBook = findBook(bookid);
+    if (bookid == targetBook) return;
+    targetBook.isRead = true;
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+
+  const deleteButton = document.createElement('button');
+  deleteButton.classList.add('red');
+  deleteButton.innerText = 'Hapus buku';
+  deleteButton.addEventListener('click', function () {
+    deleteBook(bookData.id);
+  });
+
+  function deleteBook(bookid) {
+    const targetBook = findBook(bookid);
+    if (bookid == targetBook) return;
+    books.splice(targetBook, 1);
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+
+  function findBook(bookId) {
+    for (const book of books) {
+      if (book.id == bookId) {
+        return book;
+      }
+    }
+    return null;
+  }
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('action');
+  buttonContainer.append(readButton, deleteButton);
 
   const bookContainer = document.createElement('article');
   bookContainer.classList.add('book_item');
-  bookContainer.append(bookTitle, bookAuthor, bookYear);
+  bookContainer.append(bookTitle, bookAuthor, bookYear, buttonContainer);
+  bookContainer.setAttribute('id', `bookId-${bookData.id}`);
 
-  const container = document.createElement('div');
-  container.classList.add('book_item');
-  container.append(bookContainer);
-  container.setAttribute('id', `bookId-${bookData.id}`);
+  return bookContainer;
 }
