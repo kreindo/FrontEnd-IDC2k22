@@ -70,17 +70,41 @@ function makeBookElement(bookData) {
   const bookYear = document.createElement('p');
   bookYear.innerText = `Tahun: ${bookData.year}`;
 
-  const readButton = document.createElement('button');
-  readButton.classList.add('green');
-  readButton.innerText = 'Selesai Dibaca';
-  readButton.addEventListener('click', function () {
-    readBook(bookData.id);
-  });
+  /* book is in done sect, make button yellow to retrun it to not done shelf/sect */
+
+  // function bookChecker(bookid) {
+  //   const targetBook = findBook(bookid);
+  //   if (bookid == targetBook) return;
+  //   targetBook.classList.add('yellow');
+  //   window.dispatchEvent(new Event(RENDER_EVENT));
+  // }
+
+  const Button = document.createElement('button');
+  if (!bookData.isRead) {
+    Button.classList.add('green');
+    Button.innerText = 'Selesai Dibaca';
+    Button.addEventListener('click', function () {
+      readBook(bookData.id);
+    });
+  } else {
+    Button.classList.add('yellow');
+    Button.innerText = 'Belum Dibaca';
+    Button.addEventListener('click', function () {
+      unReadBook(bookData.id);
+    });
+  }
 
   function readBook(bookid) {
     const targetBook = findBook(bookid);
     if (bookid == targetBook) return;
     targetBook.isRead = true;
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+
+  function unReadBook(bookid) {
+    const targetBook = findBook(bookid);
+    if (bookid == targetBook) return;
+    targetBook.isRead = false;
     document.dispatchEvent(new Event(RENDER_EVENT));
   }
 
@@ -109,7 +133,7 @@ function makeBookElement(bookData) {
 
   const buttonContainer = document.createElement('div');
   buttonContainer.classList.add('action');
-  buttonContainer.append(readButton, deleteButton);
+  buttonContainer.append(Button, deleteButton);
 
   const bookContainer = document.createElement('article');
   bookContainer.classList.add('book_item');
