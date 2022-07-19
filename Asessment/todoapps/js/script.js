@@ -1,4 +1,5 @@
-const todos = [];const RENDER_EVENT = 'render-todo';
+const todos = [];
+const RENDER_EVENT = 'render-todo';
 
 document.addEventListener('DOMContentLoaded', function () {
   const submitForm = document.getElementById('form');
@@ -103,6 +104,20 @@ function makeTodo(todoObject) {
     document.dispatchEvent(new Event(RENDER_EVENT));
   }
 
+  function removeTaskFromCompleted(todoId) {
+    const todoTarget = findTodoIndex(todoId);
+    if (todoTarget == -1) return;
+    todos.splice(todoTarget, 1);
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+
+  function undoTaskFromCompleted(todoId) {
+    const todoTarget = findTodo(todoId);
+    if (todoTarget == null) return;
+    todoTarget.isCompleted = false;
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
+
   function findTodo(todoId) {
     for (const todoItem of todos) {
       if (todoItem.id == todoId) {
@@ -110,6 +125,15 @@ function makeTodo(todoObject) {
       }
     }
     return null;
+  }
+
+  function findTodoIndex(todoId) {
+    for (const index in todos) {
+      if (todos[index].id === todoId) {
+        return index;
+      }
+    }
+    return -1;
   }
 
   return container;
