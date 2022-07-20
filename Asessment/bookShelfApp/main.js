@@ -1,4 +1,5 @@
-const books = [];const RENDER_EVENT = 'render-bookshelf';
+const books = [];
+const RENDER_EVENT = 'render-bookshelf';
 
 window.addEventListener('DOMContentLoaded', function () {
   const submitdata = document.getElementById('inputBook');
@@ -6,11 +7,12 @@ window.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     addBook();
   });
+  if (isStorageAvailable) {
+    loadFrStorage();
+  }
 });
 
 function addBook() {
-  //what to add first.
-  //i wanna add book here. how to do that?
   const bookTitle = document.getElementById('inputBookTitle').value;
   const bookAuthor = document.getElementById('inputBookAuthor').value;
   const bookYear = document.getElementById('inputBookYear').value;
@@ -20,11 +22,20 @@ function addBook() {
     bookTitle,
     bookAuthor,
     bookYear,
-    false
+    cbCheck()
   );
+
+  function cbCheck() {
+    const cb = document.getElementById('inputBookIsComplete');
+    if (cb.checked) {
+      return true;
+    }
+    return false;
+  }
+
   books.push(bookData);
-  console.log(bookData);
   document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
 }
 
 function genId() {
@@ -70,15 +81,6 @@ function makeBookElement(bookData) {
   const bookYear = document.createElement('p');
   bookYear.innerText = `Tahun: ${bookData.year}`;
 
-  /* book is in done sect, make button yellow to retrun it to not done shelf/sect */
-
-  // function bookChecker(bookid) {
-  //   const targetBook = findBook(bookid);
-  //   if (bookid == targetBook) return;
-  //   targetBook.classList.add('yellow');
-  //   window.dispatchEvent(new Event(RENDER_EVENT));
-  // }
-
   const Button = document.createElement('button');
   if (!bookData.isRead) {
     Button.classList.add('green');
@@ -99,6 +101,7 @@ function makeBookElement(bookData) {
     if (bookid == targetBook) return;
     targetBook.isRead = true;
     document.dispatchEvent(new Event(RENDER_EVENT));
+    saveData();
   }
 
   function unReadBook(bookid) {
@@ -106,6 +109,7 @@ function makeBookElement(bookData) {
     if (bookid == targetBook) return;
     targetBook.isRead = false;
     document.dispatchEvent(new Event(RENDER_EVENT));
+    saveData();
   }
 
   const deleteButton = document.createElement('button');
@@ -120,6 +124,7 @@ function makeBookElement(bookData) {
     if (bookid == targetBook) return;
     books.splice(targetBook, 1);
     document.dispatchEvent(new Event(RENDER_EVENT));
+    saveData();
   }
 
   function findBook(bookId) {
@@ -141,4 +146,36 @@ function makeBookElement(bookData) {
   bookContainer.setAttribute('id', `bookId-${bookData.id}`);
 
   return bookContainer;
+}
+
+const SAVED_EVENT = 'saved-todo';
+const STORAGE_KEY = 'TODO_APPS';
+
+function isStorageAvailable() {
+  if (typeof Storage == undefined) {
+    alert('Your browser does not support Storage API');
+    return false;
+  }
+  return true;
+}
+
+function saveData() {
+  if (isStorageAvailable()) {
+    const parsedData = JSON.stringify(books);
+    localStorage.setItem(STORAGE_KEY, parsedData);
+    document.dispatchEvent(new Event(SAVED_EVENT));
+  }
+}
+
+function loadFrStorage() {
+  const serializedData = localStorage.getItem(STORAGE_KEY);
+  let data = JSON.parse(serializedData);
+
+  if (data !== null) {
+    for (const book of data) {
+      books.push(book);
+    }
+  }
+
+  document.dispatchEvent(new Event(RENDER_EVENT));
 }
